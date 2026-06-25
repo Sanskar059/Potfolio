@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { cn } from "@/lib/utils";
