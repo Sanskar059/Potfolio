@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
 import Magnetic from './Magnetic';
 
 interface HeroProps {
@@ -69,43 +69,56 @@ export default function Hero({ setView }: HeroProps) {
   // Track global window scroll position
   const { scrollY } = useScroll();
 
+  // Create a smoothed physics spring for scroll position to prevent lag on mobile scroll
+  const smoothScrollY = useSpring(scrollY, {
+    stiffness: 120,
+    damping: 35,
+    restDelta: 0.001
+  });
+
   // Map absolute scroll pixels (0 to 600px) to layout progress (0 to 1)
-  const progressVal = useTransform(scrollY, [0, 600], [0, 1]);
+  const progressVal = useTransform(smoothScrollY, [0, 600], [0, 1]);
 
   // Math-based responsive interpolation for CSS properties
   const width = useTransform(progressVal, (t) => {
     if (isMobile) {
-      return `${90 + t * 10}vw`;
+      return '100vw';
     }
     return `calc(400px + ${t} * (100vw - 400px))`;
   });
 
   const height = useTransform(progressVal, (t) => {
     if (isMobile) {
-      return `${300 + t * (window.innerHeight - 300)}px`;
+      return '100vh';
     }
     return `calc(400px + ${t} * (100vh - 400px))`;
   });
 
   const right = useTransform(progressVal, (t) => {
     if (isMobile) {
-      return `${5 * (1 - t)}vw`;
+      return '0px';
     }
     return `calc(10vw * ${1 - t})`;
   });
 
   const top = useTransform(progressVal, (t) => {
     if (isMobile) {
-      return `${55 - t * 55}%`;
+      return '0px';
     }
     return `${50 - t * 50}%`;
   });
 
   const y = useTransform(progressVal, (t) => {
+    if (isMobile) {
+      return '0%';
+    }
     return `${-50 + t * 50}%`;
   });
 
   const borderRadius = useTransform(progressVal, (t) => {
+    if (isMobile) {
+      return '0px';
+    }
     return `${24 * (1 - t)}px`;
   });
 
@@ -116,8 +129,7 @@ export default function Hero({ setView }: HeroProps) {
     return 0.9 - t * 0.6;
   });
 
-  // Map scroll (0 to 800px) to play the 150 frame sequence
-  const frameIndexVal = useTransform(scrollY, [0, 800], [0, 149]);
+
 
   // Optimized Render: Only clear and draw on existing canvas bounds
   const renderCanvas = (index: number) => {
@@ -159,10 +171,18 @@ export default function Hero({ setView }: HeroProps) {
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   };
 
-  // Draw current frame on scroll
+  // Map scroll (0 to 800px) to play the 150 frame sequence (smoothed with physics spring)
+  const frameIndexVal = useTransform(smoothScrollY, [0, 800], [0, 149]);
+
+  const lastDrawnIndexRef = useRef<number>(-1);
+
+  // Draw current frame on scroll (only redraw if frame index actually changes)
   useMotionValueEvent(frameIndexVal, 'change', (latest) => {
     const frameIndex = Math.min(149, Math.floor(latest));
-    renderCanvas(frameIndex);
+    if (frameIndex !== lastDrawnIndexRef.current) {
+      lastDrawnIndexRef.current = frameIndex;
+      renderCanvas(frameIndex);
+    }
   });
 
   // Handle canvas sizing and window resizing (once on resize/load, NOT on scroll)
@@ -187,8 +207,8 @@ export default function Hero({ setView }: HeroProps) {
         lastWidth = currentWidth;
         lastHeight = currentHeight;
 
-        // Cap canvas internal resolution to max 1600px width to avoid GPU/fill-rate lag on high-res displays
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        // Cap canvas internal resolution: 1.0x on mobile for performance, 1.5x on desktop
+        const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
         const maxResolutionWidth = 1600;
 
         if (currentWidth > maxResolutionWidth) {
@@ -244,7 +264,7 @@ export default function Hero({ setView }: HeroProps) {
 
   return (
     <section className="relative h-[180vh] w-full z-0 bg-transparent" id="home">
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pt-28 pb-20 md:pt-36 md:pb-24">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-start lg:items-center justify-center pt-28 pb-6 md:pt-36 md:pb-24">
 
         {/* Canvas container (fixed viewport background) */}
         <motion.div
@@ -260,7 +280,7 @@ export default function Hero({ setView }: HeroProps) {
             zIndex: 0,
             willChange: 'width, height, top, right, transform',
           }}
-          className="overflow-hidden bg-surface-container-low border border-white/5 shadow-2xl pointer-events-none max-sm:-mt-20"
+          className="overflow-hidden bg-surface-container-low border-none lg:border border-white/5 shadow-none lg:shadow-2xl pointer-events-none"
         >
           <canvas ref={canvasRef} className="w-full h-full object-cover block" />
 
@@ -283,11 +303,11 @@ export default function Hero({ setView }: HeroProps) {
         </motion.div>
 
         {/* Hero content layer */}
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-[1.5fr,1fr] gap-20 items-center relative z-10 pointer-events-none mt-20 sm:mt-32 lg:mt-96">
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-[1.5fr,1fr] gap-20 items-center relative z-10 pointer-events-none mt-0 md:mt-32 lg:mt-96">
           <motion.div style={{ opacity: textOpacity, y: textY }} className="pointer-events-auto">
 
             {/* Availability Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/10 mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/10 mb-4 md:mb-8">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
@@ -302,7 +322,7 @@ export default function Hero({ setView }: HeroProps) {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-8 tracking-tighter text-on-surface"
+              className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 md:mb-8 tracking-tighter text-on-surface"
             >
               {headlineWords.map((word, idx) => (
                 <span key={idx} className="word-reveal inline-block overflow-hidden mr-3 align-top">
@@ -321,7 +341,7 @@ export default function Hero({ setView }: HeroProps) {
             <div className="w-16 h-px bg-primary/30 mb-6" />
 
             {/* Description */}
-            <p className="text-body-lg font-body-lg text-on-surface-variant max-w-xl mb-12">
+            <p className="text-body-lg font-body-lg text-on-surface-variant max-w-xl mb-6 md:mb-12">
               From database schema to pixel-perfect UI —
               <span className="text-on-surface font-medium">
                 {' '}building products end to end with care and velocity.
