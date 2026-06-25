@@ -26,8 +26,13 @@ export default function ExploreModal({ category, onClose }: ExploreModalProps) {
         { name: "Framer Motion", description: "Perpetual micro-animations, scroll-linked path indicators, and layout transitions.", level: "Expert", pct: 90 },
         { name: "Three.js / WebGL", description: "3D scene composition, hardware-accelerated rendering, shaders, and cameras.", level: "Intermediate", pct: 65 },
         { name: "State Management", description: "Zustand, Redux Toolkit, and Context API for global reactive stores.", level: "Advanced", pct: 85 },
-        { name: "Core Web (HTML5/CSS3/JS)", description: "Semantic markup, modern layout models (Flexbox, Grid), and raw DOM scripting.", level: "Expert", pct: 98 }
+        { name: "Core Web (HTML5/CSS3/JS)", description: "Semantic markup, modern layout models (Flexbox, Grid), and raw DOM scripting.", level: "Expert", pct: 98 },
+        { name: "GSAP", description: "Professional motion design for the web using the GreenSock Animation Platform.", level: "Expert", pct: 95 },
+        { name: "ShadCN", description: "A collection of reusable UI components for building beautiful web applications.", level: "Expert", pct: 92 },
+        { name: "Streamlit", description: "Open-source Python library for creating web applications for machine learning and data science.", level: "Intermediate", pct: 78 }
+
       ]
+
     },
     backend: {
       title: "Backend Architecture",
@@ -38,7 +43,8 @@ export default function ExploreModal({ category, onClose }: ExploreModalProps) {
         { name: "Supabase & Firebase", description: "Rapid authentication flows, real-time database sync, and storage Buckets.", level: "Advanced", pct: 90 },
         { name: "GraphQL & REST Design", description: "API design principles, payload schemas, query resolvers, and pagination models.", level: "Advanced", pct: 86 },
         { name: "WebSockets & Socket.io", description: "Bi-directional real-time communication for messaging and collaboration.", level: "Advanced", pct: 82 },
-        { name: "P2P WebRTC", description: "Interactive peer connection rooms, ICE networking, and browser media management.", level: "Intermediate", pct: 60 }
+        { name: "P2P WebRTC", description: "Interactive peer connection rooms, ICE networking, and browser media management.", level: "Intermediate", pct: 60 },
+        { name: "Redis", description: "In-memory data structure store, used as a database, cache, and message broker.", level: "Advanced", pct: 88 }
       ]
     },
     tools: {

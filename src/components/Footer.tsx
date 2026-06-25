@@ -7,7 +7,7 @@ export default function Footer() {
             SANSKAR.
           </span>
           <p className="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant">
-            © 2024 PORTFOLIO — FRONTEND DEVELOPER
+            © 2026 PORTFOLIO — FULL STACK DEVELOPER
           </p>
           <div className="flex gap-6">
             <span className="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant">

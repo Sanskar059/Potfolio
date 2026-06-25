@@ -12,7 +12,7 @@ export default function Skills({ onExplore }: SkillsProps) {
     'Framer Motion', 'Three.js', 'Redux / Zustand'
   ];
 
-  const backend = ['Node.js', 'PostgreSQL', 'Supabase', 'REST / GraphQL'];
+  const backend = ['Node.js', 'PostgreSQL', 'WebSockets', 'REST / GraphQL'];
 
   const tools = ['Git / GitHub', 'Docker', 'Vercel', 'Figma'];
 
@@ -37,7 +37,7 @@ export default function Skills({ onExplore }: SkillsProps) {
   return (
     <section className="py-32 bg-[#13131b]/65 backdrop-blur-md relative z-10 border-t border-white/5" id="skills">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-        
+
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

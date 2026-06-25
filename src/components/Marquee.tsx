@@ -1,5 +1,5 @@
 export default function Marquee() {
-  const items = ['React', 'Next.js', 'TypeScript', 'Three.js', 'Node.js', 'Webflow'];
+  const items = ['React', 'Next.js', 'Javascript', 'Three.js', 'Node.js', 'Docker', 'Tailwindcss', 'Typescript'];
   const repeatedItems = [...items, ...items, ...items, ...items]; // repeat to cover viewport width
 
   return (

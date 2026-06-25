@@ -206,7 +206,7 @@ export default function ContactFormView({ onBack }: ContactFormViewProps) {
                   <Check className="w-8 h-8 text-black stroke-[3px]" />
                 </motion.div>
 
-                <h4 className="text-xl font-bold text-white mb-2">Message Received!</h4>
+                <h4 className="text-xl font-bold text-white mb-2">Message Sent!</h4>
                 <p className="text-on-surface-variant text-sm max-w-sm mb-8 leading-relaxed">
                   Thank you for reaching out, {form.name}. Your details have been delivered successfully. Sanskar will review and respond to you at {form.email} shortly.
                 </p>
