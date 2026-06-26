@@ -16,13 +16,14 @@ import AllProjectsView from './components/AllProjectsView';
 import ProjectDetailsView from './components/ProjectDetailsView';
 import ContactFormView from './components/ContactFormView';
 import ResumeModal from './components/ui/ResumeModal';
+import RealResumeModal from './components/ui/RealResumeModal';
 import ExploreModal from './components/ui/ExploreModal';
 import type { Project } from './data/projects';
 
 function App() {
   const [currentView, setCurrentView] = useState<'home' | 'projects' | 'project-demo' | 'contact-form'>('home');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeModal, setActiveModal] = useState<'resume' | 'frontend-skills' | 'backend-skills' | 'tools-skills' | null>(null);
+  const [activeModal, setActiveModal] = useState<'resume' | 'real-resume' | 'frontend-skills' | 'backend-skills' | 'tools-skills' | null>(null);
 
   return (
     <div className="bg-background text-on-surface font-body-md min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-on-primary">
@@ -33,7 +34,7 @@ function App() {
       <Navigation 
         setView={setCurrentView} 
         currentView={currentView}
-        openResume={() => setActiveModal('resume')}
+        openResume={() => setActiveModal('real-resume')}
       />
 
       <main className="relative z-10">
@@ -109,7 +110,10 @@ function App() {
         {activeModal === 'resume' && (
           <ResumeModal onClose={() => setActiveModal(null)} />
         )}
-        {activeModal && activeModal !== 'resume' && (
+        {activeModal === 'real-resume' && (
+          <RealResumeModal onClose={() => setActiveModal(null)} />
+        )}
+        {activeModal && activeModal !== 'resume' && activeModal !== 'real-resume' && (
           <ExploreModal
             category={activeModal.replace('-skills', '') as any}
             onClose={() => setActiveModal(null)}

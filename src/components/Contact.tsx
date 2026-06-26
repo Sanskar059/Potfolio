@@ -9,7 +9,7 @@ export default function Contact({ setView }: ContactProps) {
   const socials = [
     { name: 'LinkedIn', href: 'https://www.linkedin.com/in/sanskar-singh-218510293?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_' },
     { name: 'X / Twitter', href: 'https://x.com/Sanskar_rai_19' },
-    { name: 'GitHub', href: 'https://github.com/Sanskar059' },
+    // { name: 'GitHub', href: 'https://github.com/Sanskar059' },
     { name: 'Leetcode', href: 'https://leetcode.com/u/Sanskar__/' },
     // { name: 'Email', href: 'https://sanskars654@gmail.com' },
 
